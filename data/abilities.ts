@@ -677,14 +677,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	defeatist: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				return this.chainModify(0.5);
+			if (pokemon.hp <= pokemon.maxhp / 3) {
+				return this.chainModify(0.75);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
-				return this.chainModify(0.5);
+				return this.chainModify(0.75);
 			}
 		},
 		name: "Defeatist",
@@ -961,6 +961,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 187,
 	},
+    felineprowess: {
+		onModifySpaPriority: 5,
+		onModifySpa(Spa) {
+			return this.chainModify(2);
+		},
+		name: "Feline Prowess",
+		rating: 5,
+		num: 268,
+	},
 	filter: {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
@@ -1123,6 +1132,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Fluffy",
 		rating: 3.5,
 		num: 218,
+	},
+    flytrap: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Bug') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Flytrap');
+				}
+				return null;
+			}
+		},
+		isBreakable: true,
+		name: "Fly Trap",
+		rating: 3.5,
+		num: 269,
 	},
 	forecast: {
 		onUpdate(pokemon) {
